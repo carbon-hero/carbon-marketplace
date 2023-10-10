@@ -38,6 +38,7 @@
     "zustand": "^4.1.4"
   },
   "scripts": {
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider react-app-rewired start",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
