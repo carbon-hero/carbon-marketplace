@@ -4,7 +4,7 @@ import { Nft } from 'components/Nft';
 import { LoadingSkeleton } from 'components/LoadingSkeleton';
 import { LoadStatus } from 'constant';
 import { ShopProps } from '../../model';
-import { CandyShop, EthCandyShop, SingleTokenInfo } from '@liqnft/candy-shop-sdk';
+import { CandyShop, SingleTokenInfo } from '@liqnft/candy-shop-sdk';
 import { CancelModal } from 'components/CancelModal';
 import { SellModal } from 'components/SellModal';
 import { getExchangeInfo } from 'utils/getExchangeInfo';
@@ -48,22 +48,14 @@ export const Sell: React.FC<SellProps> = ({ walletConnectComponent, style, enabl
 
   const sellNft = useCallback(
     async (nft: SingleTokenInfo, price: number) => {
-      if (candyShop instanceof EthCandyShop) {
-        return store.sell(nft, price, undefined);
-      }
-
-      if (candyShop instanceof CandyShop) {
-        const payload = {
-          shopAddress: candyShop.candyShopAddress,
-          baseUnitsPerCurrency: candyShop.baseUnitsPerCurrency,
-          shopCreatorAddress: candyShop.candyShopCreatorAddress,
-          shopTreasuryMint: candyShop.treasuryMint,
-          candyShopProgramId: candyShop.programId
-        };
-        return store.sell(nft, price, payload);
-      }
-
-      return Promise.reject('Blockchain no impl');
+      const payload = {
+        shopAddress: candyShop.candyShopAddress,
+        baseUnitsPerCurrency: candyShop.baseUnitsPerCurrency,
+        shopCreatorAddress: candyShop.candyShopCreatorAddress,
+        shopTreasuryMint: candyShop.treasuryMint,
+        candyShopProgramId: candyShop.programId
+      };
+      return store.sell(nft, price, payload);
     },
     [candyShop, store]
   );

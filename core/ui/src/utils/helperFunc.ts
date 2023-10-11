@@ -9,6 +9,10 @@
  * @returns
  */
 export function removeDuplicate<T>(firstList: T[], secondList: T[], key: keyof T): T[] {
+  if (!firstList && !secondList) return [];
+  if (!firstList) return secondList;
+  if (!secondList) return firstList;
+
   const duplicateList = [...firstList, ...secondList];
   const newList: T[] = [];
   const memo: any = {};

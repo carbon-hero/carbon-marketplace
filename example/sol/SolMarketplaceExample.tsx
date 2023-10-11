@@ -17,7 +17,7 @@ export const SolMarketplaceExample: React.FC<SolMarketplaceExampleProps> = ({ ca
   const wallet = useAnchorWallet();
   return (
     <div style={{ paddingBottom: 50, textAlign: 'center' }}>
-      <div style={{ marginBottom: 50 }}>
+      {/* <div style={{ marginBottom: 50 }}>
         <Stat
           title={'Marketplace'}
           description={
@@ -25,7 +25,7 @@ export const SolMarketplaceExample: React.FC<SolMarketplaceExampleProps> = ({ ca
           }
           candyShop={candyShop}
         />
-      </div>
+      </div> */}
 
       {/* <Orders
         wallet={wallet}

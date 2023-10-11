@@ -54,19 +54,19 @@ export const SolExample: React.FC = () => {
                 }}
               >
                 <div>
-                  <span style={{ fontWeight: 'bold', fontSize: 16, marginRight: 20 }}>Solana Candy Shop</span>
-                  <Link
+                  <span style={{ fontWeight: 'bold', fontSize: 16, marginRight: 20 }}>Carbon Market</span>
+                  {/* <Link
                     style={pageRoute === PageRoute.MarketPlace ? activeStyle : normalStyle}
                     to={PageRoute.MarketPlace}
                     onClick={() => setPageRoute(PageRoute.MarketPlace)}
                   >
                     Marketplace
-                  </Link>
+                  </Link> */}
                 </div>
                 <div>
-                  <Link style={activeStyle} to="/">
+                  {/* <Link style={activeStyle} to="/">
                     SOL
-                  </Link>
+                  </Link> */}
                   <ShopConfig onSetCandyShop={onSetCandyShop} />
                   <WalletMultiButton />
                 </div>

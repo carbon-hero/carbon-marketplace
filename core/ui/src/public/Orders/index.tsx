@@ -5,7 +5,6 @@ import { Search } from 'components/Search';
 import { Dropdown } from 'components/Dropdown';
 
 import { InfiniteOrderList } from 'components/InfiniteOrderList';
-import { PoweredBy } from 'components/PoweredBy';
 import { CollectionFilter as CollectionFilterComponent, FilterType } from 'components/CollectionFilter';
 
 import { CollectionFilter, OrderDefaultFilter, ShopProps } from '../../model';
@@ -217,10 +216,7 @@ export const Orders: React.FC<OrdersProps> = ({
                 filterType={filterType}
               />
             </div>
-            <div className="candy-orders-content">
-              {InfiniteOrderListView}
-              <PoweredBy />
-            </div>
+            <div className="candy-orders-content">{InfiniteOrderListView}</div>
           </div>
         </div>
       </div>
@@ -241,7 +237,6 @@ export const Orders: React.FC<OrdersProps> = ({
             {search && <Search onSearch={onSearchNft} placeholder="Search NFTs" />}
           </div>
           {InfiniteOrderListView}
-          <PoweredBy />
         </div>
       </div>
     </>

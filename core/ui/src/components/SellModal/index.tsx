@@ -62,6 +62,7 @@ export const SellModal: React.FC<SellModalProps> = ({
     if (validationState !== SellPriceValidationState.Valid) return;
 
     setState(TransactionState.PROCESSING);
+
     return sell(nft, price)
       .then((txHash: string) => {
         console.log('SellModal: Place sell order with transaction hash= ', txHash);
