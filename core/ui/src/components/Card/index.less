@@ -1,0 +1,58 @@
+@import '../../variable.less';
+
+.candy-card {
+  position: relative;
+  height: auto;
+  z-index: 3;
+  cursor: pointer;
+
+  &.selected {
+    border-color: @candy-shop-color-primary;
+  }
+
+  &-info {
+    color: @candy-shop-text-color-primary;
+    vertical-align: middle;
+    padding: 12px;
+    background-color: #fff;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+
+    .name {
+      font-weight: bold;
+      font-size: @candy-shop-font-size-base;
+      text-align: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      min-height: 1.57em;
+    }
+
+    .ticker {
+      font-size: @candy-shop-font-size-xs;
+      line-height: @candy-shop-font-line-height-xs;
+      text-align: left;
+      font-weight: 600;
+      color: @candy-shop-text-color-secondary;
+      text-transform: uppercase;
+      min-height: 1.57em;
+    }
+  }
+
+  .candy-liq-image {
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  .candy-card-footer {
+    padding-top: 5px;
+  }
+
+  .candy-card-stat {
+    text-align: left;
+  }
+}

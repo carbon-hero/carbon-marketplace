@@ -1,0 +1,75 @@
+@import '../../variable.less';
+
+.candy-modal {
+  padding-bottom: 20px;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+
+  .candy-modal-content {
+    color: @candy-shop-text-color-primary;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+    max-width: 90vw;
+    overflow-y: auto;
+    border-radius: 16px;
+    border: 2px solid @candy-shop-border-primary;
+    background-color: @candy-shop-popover-background;
+    box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+    @media @desktopXM {
+      padding: 30px 40px 10px;
+    }
+    // Set height to fit visible screen height when screen height <= 660px
+    // TODO: We should define more generic breakpoints for max-width and max-height
+    @media screen and (max-height: 660px) {
+      height: 100vh;
+    }
+  }
+
+  &-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 50px;
+    height: 50px;
+
+    .close {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 32px;
+      height: 32px;
+      opacity: 0.3;
+      transition: 0.2s all ease-in-out;
+
+      &:hover {
+        opacity: 1;
+        cursor: pointer;
+      }
+      &:before,
+      &:after {
+        position: absolute;
+        top: 5px;
+        left: 15px;
+        content: ' ';
+        height: 22px;
+        width: 3px;
+        background-color: @candy-shop-icon-color-primary;
+      }
+      &:before {
+        transform: rotate(45deg);
+      }
+      &:after {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}

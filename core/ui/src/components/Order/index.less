@@ -1,0 +1,60 @@
+@import '../../variable.less';
+
+.candy-order {
+  height: 100%;
+  background-color: white;
+  position: relative;
+
+  cursor: pointer;
+  user-select: none;
+
+  .candy-order-info {
+    position: relative;
+    padding: 12px;
+    text-align: left;
+  }
+
+  .candy-order-player-icon {
+    position: absolute;
+    top: -55px;
+    right: 15px;
+
+    width: 40px;
+    height: 40px;
+    color: @candy-shop-color-secondary-lightest;
+  }
+
+  .candy-order-name-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .candy-order-name {
+      max-width: calc(100% - 20px);
+    }
+  }
+
+  .candy-order-name {
+    color: @candy-shop-text-color-primary;
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: bold;
+  }
+
+  .candy-order-ticker {
+    color: @candy-shop-text-color-secondary;
+    font-size: @candy-shop-font-size-xs;
+    line-height: @candy-shop-font-line-height-xs;
+    font-weight: bold;
+    min-height: 20px;
+  }
+
+  .candy-order-price {
+    color: @candy-shop-text-color-primary;
+    font-size: @candy-shop-font-size-sm;
+    line-height: @candy-shop-font-line-height-sm;
+    font-weight: bold;
+    line-height: 20px;
+    margin-top: 6px;
+  }
+}

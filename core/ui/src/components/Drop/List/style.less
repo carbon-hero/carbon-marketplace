@@ -1,0 +1,135 @@
+@import '../../../variable.less';
+
+.candy-drop-header {
+  display: flex;
+  margin-bottom: 25px;
+
+  .candy-search {
+    margin-left: auto;
+    margin-right: 0;
+    min-width: 300px;
+    input {
+      min-height: 38px;
+    }
+  }
+}
+
+.candy-edition-infinity-element {
+  padding: 16px 30px 0;
+}
+
+.candy-edition-card {
+  &:hover {
+    z-index: 4;
+  }
+  .candy-card-info {
+    > .name,
+    > .ticker {
+      display: none;
+    }
+  }
+
+  .candy-edition-vault-icon {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 2;
+    padding: 5px;
+    background-color: #fff;
+    border: 2px solid @candy-shop-color-primary-lightest;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      svg path {
+        fill: @candy-shop-color-primary;
+      }
+    }
+
+    svg {
+      width: 16px;
+      transition: 0.3s all ease;
+    }
+  }
+}
+
+.candy-edition-list-footer-card {
+  margin-top: 20px;
+
+  .candy-edition-name-price {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .candy-edition-slide {
+    width: 100%;
+    height: 8px;
+    background: @candy-shop-color-secondary-lightest;
+    border-radius: 50px;
+    margin-top: 20px;
+
+    .slide {
+      background: @candy-shop-progress-bar-color;
+      height: 100%;
+      border-radius: 50px;
+    }
+  }
+
+  .candy-price {
+    font-size: @candy-shop-font-size-base;
+  }
+
+  .available {
+    text-align: left;
+    margin-block: 20px;
+    color: @candy-shop-color-secondary;
+
+    span {
+      color: @candy-shop-text-color-primary;
+      font-weight: bold;
+    }
+  }
+
+  .timer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    svg {
+      color: @candy-shop-color-primary;
+      margin-right: 10px;
+    }
+  }
+}
+
+.candy-edition-filter {
+  display: flex;
+  padding-left: 30px;
+  margin-bottom: 10px;
+
+  > div {
+    padding: 6px 12px;
+    border-radius: 8px;
+    min-width: 48px;
+    border: 2px solid @candy-shop-color-secondary-lightest;
+    transition: 0.2s all ease;
+    margin-right: 12px;
+    text-align: center;
+    cursor: pointer;
+
+    &.active,
+    &:hover {
+      border-color: @candy-shop-color-primary;
+      text-shadow: 1px 0 0 currentColor;
+    }
+  }
+}

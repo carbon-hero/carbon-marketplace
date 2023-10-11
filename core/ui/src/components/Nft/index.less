@@ -1,0 +1,35 @@
+@import '../../variable.less';
+
+.candy-nft {
+  &-card {
+    position: relative;
+    height: auto;
+    z-index: 3;
+  }
+
+  &-info {
+    color: @candy-shop-text-color-primary;
+    vertical-align: middle;
+    padding: 12px;
+    background-color: #fff;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+
+    .name {
+      font-weight: bold;
+      font-size: @candy-shop-font-size-base;
+      text-align: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .ticker {
+      font-size: @candy-shop-font-size-sm;
+      line-height: @candy-shop-font-line-height-sm;
+      text-align: left;
+      font-weight: 400;
+      height: 22px;
+    }
+  }
+}

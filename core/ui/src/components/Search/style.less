@@ -1,0 +1,27 @@
+@import '../../variable.less';
+
+.candy-search {
+  position: relative;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+
+  input {
+    padding: 4px 4px 4px 24px;
+    border-radius: 4px;
+    outline: none;
+    border: 1px solid @candy-shop-color-secondary-light;
+    width: 100%;
+
+    &::placeholder {
+      color: @candy-shop-color-secondary-light;
+    }
+  }
+
+  svg {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

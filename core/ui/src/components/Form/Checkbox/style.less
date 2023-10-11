@@ -1,0 +1,52 @@
+@import '../../../variable.less';
+
+.candy-checkbox-container {
+  display: flex;
+
+  .candy-checkbox-label {
+    cursor: pointer;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  &.candy-checkbox-container-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+
+    .candy-checkbox {
+      border-color: @candy-shop-color-secondary;
+      svg path {
+        fill: @candy-shop-color-secondary;
+      }
+    }
+  }
+}
+
+.candy-checkbox {
+  border: 2px solid @candy-shop-color-primary;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  cursor: pointer;
+
+  .candy-checkbox-input {
+    display: none;
+  }
+
+  &.candy-checkbox-disable {
+    border: 2px solid @candy-shop-color-secondary-light;
+
+    svg {
+      opacity: 0;
+    }
+  }
+
+  svg {
+    width: 85%;
+    height: 85%;
+  }
+}

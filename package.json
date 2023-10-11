@@ -1,0 +1,59 @@
+{
+  "private": true,
+  "workspaces": [
+    "@liqnft/candy-shop-types",
+    "@liqnft/candy-shop",
+    "example",
+    "@liqnft/candy-shop-sdk",
+    "cli"
+  ],
+  "scripts": {
+    "start": "npx parcel example/index.html",
+    "build": "npx parcel build example/index.html --public-url ./ --no-scope-hoist",
+    "gh-pages": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose",
+    "deploy": "yarn build && yarn gh-pages",
+    "format:check": "prettier --check \"**/*.+(js|jsx|ts|tsx|json|css|less)\"",
+    "format:fix": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|less)\"",
+    "prepare": "husky install",
+    "clean:root": "rm -rf node_modules && rm -rf dist",
+    "clean:sdk": "rm -rf core/sdk/node_modules && rm -rf core/sdk/dist",
+    "clean:types": "rm -rf core/types/node_modules && rm -rf core/types/dist",
+    "clean:ui": "rm -rf core/ui/node_modules && rm -rf core/ui/dist",
+    "clean:all": "yarn clean:root && yarn clean:sdk && yarn clean:ui && yarn clean:types",
+    "lint": "eslint . --ext .tsx,.ts --max-warnings=0"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "2.4.1",
+    "@parcel/packager-ts": "2.4.1",
+    "@parcel/transformer-html": "^2.4.1",
+    "@parcel/transformer-image": "^2.4.1",
+    "@parcel/transformer-less": "2.4.1",
+    "@parcel/transformer-posthtml": "^2.4.1",
+    "@parcel/transformer-typescript-types": "2.4.1",
+    "@parcel/transformer-webmanifest": "2.4.1",
+    "assert": "^2.0.0",
+    "fs": "^0.0.1-security",
+    "https-browserify": "^1.0.0",
+    "husky": "^7.0.4",
+    "os-browserify": "^0.3.0",
+    "parcel": "^2.4.1",
+    "path-browserify": "^1.0.1",
+    "prettier": "^2.6.2",
+    "querystring-es3": "^0.2.1",
+    "stream-http": "^3.2.0",
+    "typescript": ">=3.0.0",
+    "url": "^0.11.0",
+    "util": "^0.12.4",
+    "@typescript-eslint/eslint-plugin": "^4.14.0",
+    "@typescript-eslint/parser": "^4.14.0",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react-hooks": "^4.4.0"
+  },
+  "alias": {
+    "react": "./core/ui/node_modules/react",
+    "react-dom": "./core/ui/node_modules/react-dom/profiling",
+    "scheduler/tracing": "./core/ui/node_modules/scheduler/tracing-profiling"
+  }
+}

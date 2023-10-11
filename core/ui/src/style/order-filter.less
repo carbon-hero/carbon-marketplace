@@ -1,0 +1,112 @@
+@import '../variable.less';
+
+.candy-filter-selected-name {
+  font-size: @candy-shop-font-size-xs;
+  line-height: @candy-shop-font-line-height-xs;
+  color: @candy-shop-color-primary;
+  font-weight: bold;
+  padding: 0 8px;
+  border: 1px solid @candy-shop-color-primary;
+  border-radius: 4px;
+  width: fit-content;
+  margin-bottom: 6px;
+
+  span.close-icon {
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: @candy-shop-font-size-sm;
+    line-height: @candy-shop-font-line-height-sm;
+    transition: 0.3s all ease-in-out;
+    padding: 2px;
+
+    &:after {
+      display: inline-block;
+      content: '\00d7'; /* This will render the 'X' */
+    }
+
+    &:hover {
+      color: @candy-shop-color-primary-dark;
+      background-color: @candy-shop-color-primary-lightest;
+    }
+  }
+}
+.candy-collection-filter {
+  .candy-filter-options {
+    list-style-type: none;
+    max-height: 680px;
+    overflow: auto;
+  }
+
+  .candy-filter-load {
+    color: @candy-shop-color-primary;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 4px 8px;
+
+    &-disable {
+      color: @candy-shop-color-secondary-light;
+      pointer-events: none;
+    }
+  }
+
+  .candy-processing {
+    margin: 20px;
+  }
+}
+
+.candy-filter-collection-trigger {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+
+  svg {
+    color: @candy-shop-icon-color-primary;
+    margin-right: 4px;
+  }
+}
+
+.candy-filter-collection-content {
+  box-shadow: 5px 8px 24px 5px rgba(208, 216, 243, 0.6);
+  border-radius: 8px;
+  padding: 8px;
+
+  .candy-filter-options {
+    max-height: 200px;
+    overflow-y: auto;
+
+    > button {
+      display: contents;
+    }
+    li {
+      text-align: left;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1; /* number of lines to show */
+      line-clamp: 1;
+      -webkit-box-orient: vertical;
+
+      &:hover,
+      &.selected {
+        background-color: @candy-shop-color-primary-lightest;
+      }
+    }
+  }
+
+  .candy-filter-load {
+    border: none;
+    background: none;
+    color: @candy-shop-color-primary;
+    margin-top: 4px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .candy-processing {
+    margin: 8px auto 0;
+  }
+}
