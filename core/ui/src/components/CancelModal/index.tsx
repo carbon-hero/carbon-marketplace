@@ -3,7 +3,6 @@ import { ExplorerLinkBase } from '@liqnft/candy-shop-sdk';
 import { Blockchain, Order as OrderSchema } from '@liqnft/candy-shop-types';
 
 import { Modal } from 'components/Modal';
-import { PoweredByInBuyModal } from 'components/PoweredBy/PowerByInBuyModal';
 import { Processing } from 'components/Processing';
 import { ShopExchangeInfo, TransactionState } from 'model';
 import { handleError } from 'utils/ErrorHandler';
@@ -76,7 +75,6 @@ export const CancelModal: React.FC<CancelModalProps> = ({
       )}
       {state === TransactionState.PROCESSING && <Processing text="Canceling your sale" />}
       {state === TransactionState.CONFIRMED && <CancelModalConfirm order={orderRef.current} onCancel={onClose} />}
-      <PoweredByInBuyModal />
     </Modal>
   );
 };
