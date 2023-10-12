@@ -8,7 +8,7 @@ import { SellModal } from 'components/SellModal';
 import { LoadStatus } from 'constant';
 import useUserNfts from 'hooks/useUserNfts';
 import { SolStore, StoreProvider } from 'market';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getExchangeInfo } from 'utils/getExchangeInfo';
 import { ShopProps } from '../../model';
 
@@ -35,6 +35,32 @@ export const Sell: React.FC<SellProps> = ({ walletConnectComponent, style, enabl
   const [sellOrders, setSellOrders] = useState(defaultSellOrders);
   const [nftSelection, setNftSelection] = useState<SingleTokenInfo>();
   const [visibleModal, setVisibleModal] = useState<ModalType>();
+
+  const getSellOrders = useCallback(async () => {
+    if (!wallet || !wallet.publicKey) return [] as Order[];
+    const orderNfts = await safeAwait(store.getOrderNfts(wallet.publicKey.toString()));
+    return orderNfts.result;
+  }, [store, wallet]);
+
+  useEffect(() => {
+    const fetchSellOrders = async () => {
+      const orders = await getSellOrders();
+      if (!orders) return;
+      const newSellOrders: Record<string, Order> = {};
+      orders.forEach((order) => {
+        newSellOrders[order.tokenMint] = order;
+      });
+      setSellOrders(newSellOrders);
+    };
+
+    fetchSellOrders();
+
+    const interval = setInterval(() => {
+      fetchSellOrders();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [getSellOrders]);
 
   const getTokenMetadataByMintAddress = useCallback(
     (mintAddress: string) => {
@@ -63,22 +89,9 @@ export const Sell: React.FC<SellProps> = ({ walletConnectComponent, style, enabl
       const result = await connection.confirmTransaction(txHash, 'finalized');
       console.log('--> sell result', result);
 
-      if (wallet?.publicKey) {
-        const orderNfts = await safeAwait(store.getOrderNfts(wallet.publicKey.toString()));
-        if (orderNfts.result) {
-          console.log('--> orderNfts', orderNfts.result);
-          const newSellOrders: Record<string, Order> = {};
-          orderNfts.result.forEach((order) => {
-            newSellOrders[order.tokenMint] = order;
-          });
-          console.log('--> newSellOrders', newSellOrders);
-          setSellOrders(newSellOrders);
-        }
-      }
-
       return txHash;
     },
-    [candyShop, store, wallet?.publicKey]
+    [candyShop, store]
   );
 
   const cancelOrder = async (order: Order) => {
@@ -88,12 +101,6 @@ export const Sell: React.FC<SellProps> = ({ walletConnectComponent, style, enabl
     const connection = (candyShop as CandyShop).connection;
     const result = await connection.confirmTransaction(txHash, 'finalized');
     console.log('--> cancel result', result);
-
-    setSellOrders((prev) => {
-      const newSellOrders = { ...prev };
-      delete newSellOrders[order.tokenMint];
-      return newSellOrders;
-    });
 
     return txHash;
   };
