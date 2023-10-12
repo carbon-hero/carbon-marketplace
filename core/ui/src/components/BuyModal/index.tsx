@@ -4,7 +4,6 @@ import { CandyShopPay, ExplorerLinkBase, OrderPayloadResponse } from '@liqnft/ca
 import { Blockchain, Order as OrderSchema, PaymentErrorName } from '@liqnft/candy-shop-types';
 
 import { Modal } from 'components/Modal';
-import { PoweredByInBuyModal } from 'components/PoweredBy/PowerByInBuyModal';
 import { Processing } from 'components/Processing';
 import { ShopExchangeInfo, BuyModalState, PaymentErrorDetails, CreditCardPayAvailability } from 'model';
 import { ErrorMsgMap, ErrorType, handleError } from 'utils/ErrorHandler';
@@ -209,7 +208,6 @@ export const BuyModal: React.FC<BuyModalProps> = ({
           />
         )}
       </div>
-      <PoweredByInBuyModal />
     </Modal>
   );
 };
