@@ -15,6 +15,7 @@ interface SolMarketplaceExampleProps {
 
 export const SolMarketplaceExample: React.FC<SolMarketplaceExampleProps> = ({ candyShop }) => {
   const wallet = useAnchorWallet();
+
   return (
     <div style={{ paddingBottom: 50, textAlign: 'center' }}>
       {/* <div style={{ marginBottom: 50 }}>
@@ -27,7 +28,8 @@ export const SolMarketplaceExample: React.FC<SolMarketplaceExampleProps> = ({ ca
         />
       </div> */}
 
-      {/* <Orders
+      <h1 style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: 30 }}>Listing NFTs</h1>
+      <Orders
         wallet={wallet}
         walletConnectComponent={<WalletMultiButton />}
         candyShop={candyShop}
@@ -35,7 +37,7 @@ export const SolMarketplaceExample: React.FC<SolMarketplaceExampleProps> = ({ ca
         filterSearch
         search
         filterType="dropdown"
-      /> */}
+      />
 
       {/* <h1 style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: 30 }}>Order Detail</h1>
       <OrderDetail

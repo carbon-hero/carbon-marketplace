@@ -1,19 +1,18 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { fetchOrdersByShopAddress } from '@liqnft/candy-shop-sdk';
-import { ListBase, NftCollection, Order } from '@liqnft/candy-shop-types';
-import { Search } from 'components/Search';
-import { Dropdown } from 'components/Dropdown';
+import { safeAwait } from '@liqnft/candy-shop-sdk';
+import { Order } from '@liqnft/candy-shop-types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { FilterType } from 'components/CollectionFilter';
 import { InfiniteOrderList } from 'components/InfiniteOrderList';
-import { CollectionFilter as CollectionFilterComponent, FilterType } from 'components/CollectionFilter';
 
-import { CollectionFilter, OrderDefaultFilter, ShopProps } from '../../model';
-import { removeDuplicate, removeListeners } from 'utils/helperFunc';
-import { ORDER_FETCH_LIMIT, SORT_OPTIONS } from 'constant/Orders';
-import { useSocket } from 'public/Context/Socket';
+import { SORT_OPTIONS } from 'constant/Orders';
 import { EventName } from 'constant/SocketEvent';
+import useUserNfts from 'hooks/useUserNfts';
+import { StoreProvider } from 'market';
+import { useSocket } from 'public/Context/Socket';
+import { removeDuplicate, removeListeners } from 'utils/helperFunc';
+import { CollectionFilter, OrderDefaultFilter, ShopProps } from '../../model';
 import './index.less';
-import { handleError } from 'utils/ErrorHandler';
 
 interface OrdersProps extends ShopProps {
   walletConnectComponent: React.ReactElement;
@@ -38,108 +37,39 @@ interface OrdersProps extends ShopProps {
  *    - CollectionFilter: hardcode collections
  *    - auto: list collection from Shop filter UI, prop shopFilters=true
  */
-export const Orders: React.FC<OrdersProps> = ({
-  walletConnectComponent,
-  url,
-  identifiers,
-  filters,
-  style,
-  sellerAddress,
-  defaultFilter,
-  sellerUrl,
-  search,
-  filterSearch,
-  candyShop,
-  wallet,
-  filterType = 'list'
-}) => {
-  const [sortedByOption, setSortedByOption] = useState(SORT_OPTIONS[0]);
-  const [orders, setOrders] = useState<any[]>([]);
-  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
-  const [startIndex, setStartIndex] = useState(0);
-  // manual collection filter
-  const [collectionFilter, setCollectionFilter] = useState<CollectionFilter | undefined>(() => {
-    if (Array.isArray(filters) && defaultFilter?.[OrderDefaultFilter.COLLECTION]) {
-      return filters?.find((item) => item.collectionId === defaultFilter.collection);
-    }
-  });
-  // auto collection filter
-  const [selectedCollection, setSelectedCollection] = useState<NftCollection>();
-  const [nftKeyword, setNftKeyword] = useState<string>();
+export const Orders: React.FC<OrdersProps> = ({ walletConnectComponent, url, style, sellerUrl, candyShop, wallet }) => {
+  const sortedByOption = SORT_OPTIONS[0];
+
   const { onSocketEvent } = useSocket();
 
-  const onSearchNft = useCallback((nftName: string) => {
-    setNftKeyword(nftName);
-  }, []);
+  const { shopResponse } = useUserNfts({ candyShop, wallet }, { enableCacheNFT: true });
+  const store = useMemo(() => StoreProvider({ candyShop, wallet, shopResponse }), [candyShop, shopResponse, wallet]);
 
-  const candyShopAddress = candyShop.candyShopAddress;
+  const [orders, setOrders] = useState<Order[]>([]);
 
-  const fetchOrders = useCallback(
-    (offset: number) => {
-      if (!candyShopAddress) return;
-
-      fetchOrdersByShopAddress(candyShopAddress, {
-        sortBy: [sortedByOption.value],
-        offset,
-        limit: ORDER_FETCH_LIMIT,
-        sellerAddress,
-        identifiers: getUniqueIdentifiers(identifiers, collectionFilter?.identifier),
-        attribute: collectionFilter?.attribute,
-        collectionId: selectedCollection?.id,
-        nftName: nftKeyword,
-        blockchain: candyShop.env
-      })
-        .then((res: ListBase<Order>) => {
-          const { result, count, offset, totalCount } = res;
-
-          setHasNextPage(offset + count < totalCount);
-          setStartIndex((startIndex) => startIndex + ORDER_FETCH_LIMIT);
-          setOrders((existingOrders) => {
-            if (offset === 0) return result;
-            return removeDuplicate<Order>(existingOrders, result, 'tokenMint');
-          });
-        })
-        .catch((err: Error) => {
-          console.info('fetchOrdersByShopAddress failed: ', err);
-          setHasNextPage(false);
-          handleError(err, 'Get orders failed.');
-        });
-    },
-    [
-      candyShop.env,
-      candyShopAddress,
-      collectionFilter?.attribute,
-      collectionFilter?.identifier,
-      identifiers,
-      nftKeyword,
-      selectedCollection?.id,
-      sellerAddress,
-      sortedByOption.value
-    ]
-  );
-
-  const loadNextPage = (startIndex: number) => () => {
-    if (startIndex === 0) return;
-    fetchOrders(startIndex);
-  };
-
-  const onResetLoadingOrders = () => {
-    setStartIndex(0);
-    setHasNextPage(true);
-  };
-
-  const onChangeCollection = (item: NftCollection | CollectionFilter | undefined, type: 'auto' | 'manual') => () => {
-    onResetLoadingOrders();
-    if (type === 'auto') {
-      setSelectedCollection(item as NftCollection);
-    } else {
-      setCollectionFilter(item as CollectionFilter);
-    }
-  };
+  const getSellOrders = useCallback(async () => {
+    if (!wallet || !wallet.publicKey) return [] as Order[];
+    const orderNfts = await safeAwait(store.getOrderNfts(wallet.publicKey.toString()));
+    return orderNfts.result;
+  }, [store, wallet]);
 
   useEffect(() => {
-    fetchOrders(0);
-  }, [fetchOrders]);
+    const fetchSellOrders = async () => {
+      const orders = await getSellOrders();
+      if (!orders) return;
+      setOrders(orders);
+    };
+
+    fetchSellOrders();
+
+    const interval = setInterval(() => {
+      fetchSellOrders();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [getSellOrders]);
+
+  console.log('--> selling orders', orders);
 
   useEffect(() => {
     const controllers = [
@@ -177,74 +107,19 @@ export const Orders: React.FC<OrdersProps> = ({
       orders={orders}
       walletConnectComponent={walletConnectComponent}
       url={url}
-      hasNextPage={hasNextPage}
-      loadNextPage={loadNextPage(startIndex)}
+      hasNextPage={false}
+      loadNextPage={() => {}}
       sellerUrl={sellerUrl}
       candyShop={candyShop}
       wallet={wallet}
     />
   );
 
-  if (filters) {
-    return (
-      <div className="candy-orders-container" style={style}>
-        <div className="candy-container">
-          <div className="candy-orders-sort candy-orders-sort-right">
-            {search && <Search onSearch={onSearchNft} placeholder="Search NFTs" />}
-            <Dropdown
-              items={SORT_OPTIONS}
-              selectedItem={sortedByOption}
-              onSelectItem={(item) => {
-                setSortedByOption(item);
-                setStartIndex(0);
-              }}
-              defaultValue={SORT_OPTIONS[0]}
-            />
-          </div>
-
-          <div className="candy-orders-filter">
-            <div className="candy-filter">
-              <div className="candy-filter-title">Filters</div>
-
-              <CollectionFilterComponent
-                onChange={onChangeCollection}
-                selected={selectedCollection}
-                filters={filters}
-                selectedManual={collectionFilter}
-                search={filterSearch}
-                candyShopAddress={candyShopAddress}
-                filterType={filterType}
-              />
-            </div>
-            <div className="candy-orders-content">{InfiniteOrderListView}</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="candy-orders-container" style={style}>
-        <div className="candy-container">
-          <div className="candy-orders-sort">
-            <Dropdown
-              items={SORT_OPTIONS}
-              selectedItem={sortedByOption}
-              onSelectItem={(item) => setSortedByOption(item)}
-              defaultValue={SORT_OPTIONS[0]}
-            />
-            {search && <Search onSearch={onSearchNft} placeholder="Search NFTs" />}
-          </div>
-          {InfiniteOrderListView}
-        </div>
+        <div className="candy-container">{InfiniteOrderListView}</div>
       </div>
     </>
   );
 };
-
-function getUniqueIdentifiers(identifiers: number[] = [], filterIdentifiers: number | number[] = []) {
-  return [
-    ...new Set([...identifiers, ...(typeof filterIdentifiers === 'number' ? [filterIdentifiers] : filterIdentifiers)])
-  ];
-}
