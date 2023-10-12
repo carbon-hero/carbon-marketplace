@@ -36,7 +36,7 @@ export const SolExample: React.FC = () => {
                   <span style={{ fontWeight: 'bold', fontSize: 16, marginRight: 20 }}>Carbon Market</span>
                 </div>
                 <div>
-                  <ShopConfig onSetCandyShop={onSetCandyShop} />
+                  {/* <ShopConfig onSetCandyShop={onSetCandyShop} /> */}
                   <WalletMultiButton />
                 </div>
               </div>
