@@ -1,14 +1,12 @@
-import { safeAwait } from '@liqnft/candy-shop-sdk';
 import { Order } from '@liqnft/candy-shop-types';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FilterType } from 'components/CollectionFilter';
 import { InfiniteOrderList } from 'components/InfiniteOrderList';
 
 import { SORT_OPTIONS } from 'constant/Orders';
 import { EventName } from 'constant/SocketEvent';
-import useUserNfts from 'hooks/useUserNfts';
-import { StoreProvider } from 'market';
+import { BASE_URL } from 'market/utils';
 import { useSocket } from 'public/Context/Socket';
 import { removeDuplicate, removeListeners } from 'utils/helperFunc';
 import { CollectionFilter, OrderDefaultFilter, ShopProps } from '../../model';
@@ -42,22 +40,13 @@ export const Orders: React.FC<OrdersProps> = ({ walletConnectComponent, url, sty
 
   const { onSocketEvent } = useSocket();
 
-  const { shopResponse } = useUserNfts({ candyShop, wallet }, { enableCacheNFT: true });
-  const store = useMemo(() => StoreProvider({ candyShop, wallet, shopResponse }), [candyShop, shopResponse, wallet]);
-
   const [orders, setOrders] = useState<Order[]>([]);
-
-  const getSellOrders = useCallback(async () => {
-    if (!wallet || !wallet.publicKey) return [] as Order[];
-    const orderNfts = await safeAwait(store.getOrderNfts(wallet.publicKey.toString()));
-    return orderNfts.result;
-  }, [store, wallet]);
 
   useEffect(() => {
     const fetchSellOrders = async () => {
-      const orders = await getSellOrders();
-      if (!orders) return;
-      setOrders(orders);
+      const resp = await fetch(`${BASE_URL}/order/${candyShop.candyShopAddress}`);
+      const data = await resp.json();
+      setOrders(data.result);
     };
 
     fetchSellOrders();
@@ -67,9 +56,7 @@ export const Orders: React.FC<OrdersProps> = ({ walletConnectComponent, url, sty
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [getSellOrders]);
-
-  console.log('--> selling orders', orders);
+  }, [candyShop.candyShopAddress]);
 
   useEffect(() => {
     const controllers = [

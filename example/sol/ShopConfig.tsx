@@ -115,6 +115,8 @@ export const ShopConfig: React.FC<ShopConfigProps> = ({ onSetCandyShop }) => {
     if (candyForm) onUpdateFormState(candyForm);
   }, [candyForm, onUpdateFormState]);
 
+  return <></>;
+
   return (
     <>
       <Button type="default" size="large" style={{ marginRight: 8 }} onClick={() => setIsModalVisible(true)}>
