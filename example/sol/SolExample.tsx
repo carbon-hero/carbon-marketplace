@@ -9,6 +9,7 @@ import { CandyShopDataValidator } from '../../core/ui/.';
 import { CandyShop } from '../../core/sdk/.';
 import { ShopConfig } from './ShopConfig';
 import { Cluster } from '@solana/web3.js';
+import Logo from '../assets/carbon-logo.jpg';
 
 export const SolExample: React.FC = () => {
   const [candyShop, setCandyShop] = useState<CandyShop | null>();
@@ -32,8 +33,14 @@ export const SolExample: React.FC = () => {
                   alignItems: 'center'
                 }}
               >
-                <div>
-                  <span style={{ fontWeight: 'bold', fontSize: 16, marginRight: 20 }}>Carbon Market</span>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <img src={Logo} style={{ width: 40, height: 40 }} />
+                  <span style={{ fontWeight: 'bold', fontSize: 20, marginRight: 20 }}>My Carbon Offset Hero</span>
                 </div>
                 <div>
                   <ShopConfig onSetCandyShop={onSetCandyShop} />
