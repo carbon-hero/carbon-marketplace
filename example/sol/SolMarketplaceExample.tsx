@@ -28,7 +28,7 @@ export const SolMarketplaceExample: React.FC<SolMarketplaceExampleProps> = ({ ca
         />
       </div> */}
 
-      <h1 style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: 30 }}>Listing NFTs</h1>
+      <h1 style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: 30 }}>Buy verified carbon credits generated from people</h1>
       <Orders
         wallet={wallet}
         walletConnectComponent={<WalletMultiButton />}
