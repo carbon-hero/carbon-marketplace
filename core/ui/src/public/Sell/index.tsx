@@ -44,8 +44,9 @@ export const Sell: React.FC<SellProps> = ({ walletConnectComponent, style, enabl
 
   useEffect(() => {
     const fetchSellOrders = async () => {
-      const orders = await getSellOrders();
+      let orders = await getSellOrders();
       if (!orders) return;
+      orders = orders.filter((order) => order.nftDescription.includes('Carbon offsets'));
       const newSellOrders: Record<string, Order> = {};
       orders.forEach((order) => {
         newSellOrders[order.tokenMint] = order;
@@ -134,14 +135,16 @@ export const Sell: React.FC<SellProps> = ({ walletConnectComponent, style, enabl
         {loading ? <LoadingSkeleton /> : null}
         {!loading && nfts.length && shopResponse ? (
           <div className="candy-container-list">
-            {nfts.map((item) => (
-              <div
-                key={item.tokenMintAddress}
-                onClick={handleClickNft(item, Boolean(sellOrders[item.tokenMintAddress]))}
-              >
-                <Nft nft={item} sellDetail={sellOrders[item.tokenMintAddress]} />
-              </div>
-            ))}
+            {nfts
+              .filter((nft) => nft.nftDescription.includes('Carbon offsets'))
+              .map((item) => (
+                <div
+                  key={item.tokenMintAddress}
+                  onClick={handleClickNft(item, Boolean(sellOrders[item.tokenMintAddress]))}
+                >
+                  <Nft nft={item} sellDetail={sellOrders[item.tokenMintAddress]} />
+                </div>
+              ))}
           </div>
         ) : null}
         {!loading && nfts.length === 0 && <Empty description="No NFTs found" />}

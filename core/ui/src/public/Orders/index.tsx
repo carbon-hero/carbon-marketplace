@@ -46,7 +46,7 @@ export const Orders: React.FC<OrdersProps> = ({ walletConnectComponent, url, sty
     const fetchSellOrders = async () => {
       const resp = await fetch(`${BASE_URL}/order/${candyShop.candyShopAddress}`);
       const data = await resp.json();
-      setOrders(data.result.filter(i => i.nftExternalUri !== 'https://candy.liqnft.com/'));
+      setOrders((data.result as Order[]).filter((i) => i.nftDescription.includes('Carbon offsets')));
     };
 
     fetchSellOrders();
